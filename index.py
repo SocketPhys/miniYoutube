@@ -38,7 +38,7 @@ def load():
 
 def searchByTag(tag):
      TAG = tag
-     response = requests.get("https://www.googleapis.com/youtube/v3/search?key=" + API_KEY + "&q=" + TAG + "&part=id&order=date&maxResults=20")
+     response = requests.get("https://www.googleapis.com/youtube/v3/search?key=" + API_KEY + "&q=" + TAG + "&part=id&order=date&maxResults=10")
      response = json.loads(response.text)
      url=[]
      for i in range(0,len(response['items'])):
