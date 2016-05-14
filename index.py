@@ -12,34 +12,78 @@ def root():
      return render_template('start.html')
     
 @application.route("/channel",methods=['POST'])
-def load():
+def load():     
      CHANNEL= request.form['channel']
+     TAG = request.form['tag']
+     if not CHANNEL:
+        try:
+            url = searchByTag(TAG)
+            return render_template('load.html',url=url)
+        except:
+            return render_template('errorTag.html')
+     
      try:
-        CHANNEL = CHANNEL[CHANNEL.index('https://www.youtube.com/user/')+29:]
-        CHANNEL =requests.get("https://www.googleapis.com/youtube/v3/channels?key=" + API_KEY + "&forUsername=" + CHANNEL + "&part=id")
-        CHANNEL =json.loads(CHANNEL.text)
-        CHANNEL = CHANNEL['items'][0]['id']
+        url = searchByUserLink(CHANNEL)
+        return render_template('load.html',url=url)
      except:
         try:
-            CHANNEL = CHANNEL[CHANNEL.index('https://www.youtube.com/channel/')+32:]
+            url = searchByUserLink(CHANNEL)
+            return render_template('load.html',url=url)
         except:
             try:
-                 CHANNEL =requests.get("https://www.googleapis.com/youtube/v3/channels?key=" + API_KEY + "&forUsername=" + CHANNEL + "&part=id")
-                 CHANNEL =json.loads(CHANNEL.text)
-                 CHANNEL = CHANNEL['items'][0]['id']
+                url = searchByUsername(CHANNEL)
+                return render_template('load.html',url=url)
             except:
-                 return render_template('error.html')        
-     response = requests.get("https://www.googleapis.com/youtube/v3/search?key=" + API_KEY + "&channelId=" + CHANNEL + "&part=id&order=date&maxResults=20")
+                return render_template('error.html')
+
+def searchByTag(tag):
+     TAG = tag
+     response = requests.get("https://www.googleapis.com/youtube/v3/search?key=" + API_KEY + "&q=" + TAG + "&part=id&order=date&maxResults=20")
      response = json.loads(response.text)
      url=[]
      for i in range(0,len(response['items'])):
         result = response.get('items', {})[i].get('id', {}).get('videoId')
         if result:
             url.append("http://www.youtube.com/v/" + result)
+     
+     return url 
 
+def searchByUserLink(user):
+    USER=user
 
-     return render_template('load.html',url=url)
+    ID  = USER[USER.index('https://www.youtube.com/user/')+29:]
+    return searchByChannelId(ID)
+   
+  
  
+def searchByUsername(username):
+    USERNAME=username
+    USERNAME =requests.get("https://www.googleapis.com/youtube/v3/channels?key=" + API_KEY + "&forUsername=" + USERNAME + "&part=id")
+    USERNAME =json.loads(USERNAME.text)
+    ID= USERNAME['items'][0]['id']
+    return searchByChannelId(ID)
+   
+def searchByChannelLink(channel):
+    CHANNEL = channel
+    ID =  CHANNEL[CHANNEL.index('https://www.youtube.com/channel/')+32:]
+    return searchByChannelId(ID)
+ 
+    
+
+def searchByChannelId(ID):
+    response = requests.get("https://www.googleapis.com/youtube/v3/search?key=" + API_KEY + "&channelId=" + ID  + "&part=id&order=date&maxResults=20")
+    response = json.loads(response.text)
+    url=[]
+    for i in range(0,len(response['items'])):
+       result = response.get('items', {})[i].get('id', {}).get('videoId')
+       if result:
+           url.append("http://www.youtube.com/v/" + result)
+    return url
+
+
+    
+
+
 if __name__ == "__main__":
     
    application.debug = True
