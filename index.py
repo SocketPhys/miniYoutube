@@ -3,15 +3,15 @@ from flask import Flask,render_template, request
 import yaml
 import json
 import requests
-application = Flask(__name__)
+app = Flask(__name__)
 API_KEY = yaml.load(open("settings.yml",'r').read())['API_KEY']
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
-@application.route("/")
+@app.route("/")
 def root():
      return render_template('start.html')
     
-@application.route("/channel",methods=['POST'])
+@app.route("/channel",methods=['POST'])
 def load():     
      CHANNEL= request.form['channel']
      TAG = request.form['tag']
