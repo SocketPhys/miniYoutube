@@ -5,7 +5,6 @@ import json
 import requests
 application = Flask(__name__)
 API_KEY = yaml.load(open("settings.yml",'r').read())['API_KEY']
-print(API_KEY)
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 @application.route("/")
@@ -31,12 +30,9 @@ def load():
             except:
                  return render_template('error.html')        
      response = requests.get("https://www.googleapis.com/youtube/v3/search?key=" + API_KEY + "&channelId=" + CHANNEL + "&part=id&order=date&maxResults=20")
-     print(response.text)
      response = json.loads(response.text)
      url=[]
-     print(response['items'][2]['id'])
      for i in range(0,len(response['items'])):
-        #print(response['items'][i]['id']['videoId'])
         result = response.get('items', {})[i].get('id', {}).get('videoId')
         if result:
             url.append("http://www.youtube.com/v/" + result)
