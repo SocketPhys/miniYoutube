@@ -77,7 +77,7 @@ def searchByChannelId(ID):
     for i in range(0,len(response['items'])):
        result = response.get('items', {})[i].get('id', {}).get('videoId')
        if result:
-           url.append("http://www.youtube.com/v/" + result)
+           url.append("https://www.youtube.com/v/" + result)
     return url
 
 
