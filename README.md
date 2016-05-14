@@ -5,6 +5,8 @@
 
 #Update
 I have pushed the application to [Heroku](https://quiet-cove-22921.herokuapp.com/)
+
+#What it is
 A website where you input a channel url or name, or a tag like "pokemon" and it displays the most recent videos in a simple and clean design. This is a way for me to get more used to using Flask so I'll be adding more features as time goes by.
 
 #Installation
