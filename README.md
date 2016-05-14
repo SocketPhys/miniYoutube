@@ -10,7 +10,7 @@ I have pushed the application to [Heroku](https://quiet-cove-22921.herokuapp.com
 A website where you input a channel url or name, or a tag like "pokemon" and it displays the most recent videos in a simple and clean design. This is a way for me to get more used to using Flask so I'll be adding more features as time goes by.
 
 #Installation
-All you have to do is download the code and run it on localhost or some server of yours.
+All you have to do is download the code and run it on localhost or some server of yours. Then in settings.yml fill in the API key you get for it. You can get the key and enable the Youtube Data API [here](https://console.developers.google.com/)
 
 #What it does
 Right now all it does it prompt you for a channel name or url, or tag. It then embeds the latest 20 videos of that channel or tag.
