@@ -12,33 +12,36 @@ def root():
      return render_template('start.html')
     
 @app.route("/channel",methods=['POST'])
-def load():     
+def load():  
+     SEARCH = request.form.get('search');
      CHANNEL= request.form['channel']
      TAG = request.form['tag']
      if not CHANNEL:
         try:
-            url = searchByTag(TAG)
+            url = searchByTag(TAG,SEARCH)
             return render_template('load.html',url=url)
         except:
             return render_template('errorTag.html')
      
      try:
-        url = searchByUserLink(CHANNEL)
+        url = searchByUserLink(CHANNEL,SEARCH)
         return render_template('load.html',url=url)
      except:
         try:
-            url = searchByUserLink(CHANNEL)
+            url = searchByUserLink(CHANNEL,SEARCH)
             return render_template('load.html',url=url)
         except:
             try:
-                url = searchByUsername(CHANNEL)
+                url = searchByUsername(CHANNEL,SEARCH)
                 return render_template('load.html',url=url)
             except:
                 return render_template('error.html')
 
-def searchByTag(tag):
+def searchByTag(tag,search):
+
+     SEARCH = search
      TAG = tag
-     response = requests.get("https://www.googleapis.com/youtube/v3/search?key=" + API_KEY + "&q=" + TAG + "&part=id&order=date&maxResults=10")
+     response = requests.get("https://www.googleapis.com/youtube/v3/search?key=" + API_KEY + "&q=" + TAG + "&part=id&order=" + SEARCH +"&maxResults=10")
      response = json.loads(response.text)
      url=[]
      for i in range(0,len(response['items'])):
@@ -70,8 +73,8 @@ def searchByChannelLink(channel):
  
     
 
-def searchByChannelId(ID):
-    response = requests.get("https://www.googleapis.com/youtube/v3/search?key=" + API_KEY + "&channelId=" + ID  + "&part=id&order=date&maxResults=10")
+def searchByChannelId(ID,SEARCH):
+    response = requests.get("https://www.googleapis.com/youtube/v3/search?key=" + API_KEY + "&channelId=" + ID  + "&part=id&order=" + SEARCH  +"&maxResults=10")
     response = json.loads(response.text)
     url=[]
     for i in range(0,len(response['items'])):
@@ -82,5 +85,6 @@ def searchByChannelId(ID):
 
 
     
-
+if __name__=='__main__':
+    app.run(debug=True)
 
