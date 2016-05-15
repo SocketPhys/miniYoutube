@@ -51,25 +51,25 @@ def searchByTag(tag,search):
      
      return url 
 
-def searchByUserLink(user):
+def searchByUserLink(user,SEARCH):
     USER=user
 
     ID  = USER[USER.index('https://www.youtube.com/user/')+29:]
-    return searchByChannelId(ID)
+    return searchByChannelId(ID,SEARCH)
    
   
  
-def searchByUsername(username):
+def searchByUsername(username,SEARCH):
     USERNAME=username
     USERNAME =requests.get("https://www.googleapis.com/youtube/v3/channels?key=" + API_KEY + "&forUsername=" + USERNAME + "&part=id")
     USERNAME =json.loads(USERNAME.text)
     ID= USERNAME['items'][0]['id']
-    return searchByChannelId(ID)
+    return searchByChannelId(ID,SEARCH)
    
-def searchByChannelLink(channel):
+def searchByChannelLink(channel,SEARCH):
     CHANNEL = channel
     ID =  CHANNEL[CHANNEL.index('https://www.youtube.com/channel/')+32:]
-    return searchByChannelId(ID)
+    return searchByChannelId(ID,SEARCH)
  
     
 
